@@ -1,0 +1,5 @@
+enum ModelType
+{
+    BinarySymmetricChannel,
+    GilbertEllitonModel
+}
