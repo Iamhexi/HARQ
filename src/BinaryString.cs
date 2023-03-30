@@ -1,10 +1,10 @@
 class BinaryString
 {
-    public string Content {set;}
+    public string Content {set;get;}
 
     public BinaryString(string content)
     {
-        setContent(content);
+        SetContent(content);
     }
 
     // BinaryString can contain only ones and zeros. Every non-zero character is set to 1.
@@ -48,7 +48,7 @@ class BinaryString
 
     public override string ToString()
     {
-        return Content;
+        return Content == "" ? "[Empty BinaryString]" : Content;
     }
 
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 class CommunicationChannel
@@ -6,39 +7,88 @@ class CommunicationChannel
     // store, genrate inferences, and send back the message
     private Queue<Packet> channel = new Queue<Packet>();
 
+    private InterferenceGenerator interferenceGenerator = null;
+    private Sender sender = null;
+    private Receiver receiver = null;
+
+    private Encoder correctionEncoder;
+    private Decoder correctionDecoder;
+
+    private Encoder detectionEncoder;
+    private Decoder detectionDecoder;
 
     public void AddReceiver(Receiver receiver)
     {
         this.receiver = receiver;
     }
 
-    public void AddSend(Sender sender)
+    public void AddSender(Sender sender)
     {
         this.sender = sender;
     }
 
-    private static Packet CreatePacket(BinaryString message)
+    public void AddInterferenceGenerator(InterferenceGenerator generator)
     {
-        return new Packet( message.toString() );
+        this.interferenceGenerator = generator;
     }
 
-    public void InsertMessage(BinaryString message)
+    private static Packet CreatePacket(BinaryString message)
     {
-        Packet packet = CommunicationChannel::CreatePacket(message);
+        return new Packet( message.ToString() );
+    }
 
-        // attach detection & correction codes 
-        // encode the message with Coder
+    private static BinaryString CreateBinaryString(Packet packet)
+    {
+        return packet.Content;
+    }
 
-        // apply inferences
-        //InterferenceGenerator:: // make noise according to model type
+    private bool ErrorOccurs()
+    {
+        return sender == null || receiver == null || interferenceGenerator == null
+            || detectionEncoder == null || detectionDecoder == null
+            || correctionEncoder == null || correctionDecoder == null;
+    }
 
+    public void TrasmitData()
+    {
+        if (ErrorOccurs()) {
+            Console.WriteLine("Error occured, cannot trasmit data.");
+            return;
+        }
+        // get the message from the receiver
+        BinaryString encodedMessage = sender.GetNewMessage();
 
+        // apply detection then correction encoding
+        encodedMessage = detectionEncoder.Encode(encodedMessage);
+        encodedMessage = correctionEncoder.Encode(encodedMessage);
+
+        // pack data into a packet
+        Packet packet = CommunicationChannel.CreatePacket(encodedMessage);
+
+        // simulate interferences inside a communication channel
+        interferenceGenerator.DeformPacket(packet);
+
+        // pass on the packet to the output
         channel.Enqueue(packet);
     }
 
-    public BinaryString RetrieveMessage()
+    public void RetrieveData()
     {
-        // decode the message
-        // dequeue message from the queue
+        if (ErrorOccurs()) {
+            Console.WriteLine("Error occured, cannot retrieve data");
+            return;
+        } else if (channel.Count == 0) {
+            Console.WriteLine("There are not messages in the communication channel available to be retrieved.");
+            return;
+        }
+            
+
+        Packet recievedPacket = channel.Dequeue();
+        BinaryString message = CreateBinaryString( recievedPacket );
+
+        message = correctionDecoder.Decode(message);
+        message = detectionDecoder.Decode(message);
+
+        receiver.ReceiveMessage(message);
     }
 }

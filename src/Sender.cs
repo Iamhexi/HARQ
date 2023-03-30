@@ -1,6 +1,6 @@
 class Sender
 {
-    BinaryString void GetNewMessage() // through all available channels
+    public BinaryString GetNewMessage()
     {
         return new BinaryString("1010101");
     }
