@@ -8,9 +8,9 @@ class BSCInterferenceGenerator : InterferenceGenerator
     public Packet DeformPacket(Packet packet)
     {
         // interference probability equal to 1.0
-        Packet result = new Packet("");
+        Packet result = new Packet(packet.Content);
 
-        int randomIndex = randomNumberGenerator.Next(0, packet.Content.GetLength());
+        int randomIndex = randomNumberGenerator.Next(0, result.Content.GetLength());
         InvertBit(result.Content, randomIndex);
 
         return result;

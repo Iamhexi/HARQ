@@ -6,7 +6,23 @@ class Packet
 
     public Packet(string content)
     {
-        this.Id = idCounter++;
+        setId();
         this.Content = new BinaryString(content);
+    }
+
+    public Packet(BinaryString content)
+    {
+        setId();
+        this.Content = content;
+    }
+
+    public int GetNumberOfMismatchingBits(Packet packet)
+    {
+        return Content.GetNumberOfMismatchingBits(packet.Content);
+    }
+
+    private void setId()
+    {
+        this.Id = idCounter++; 
     }
 }

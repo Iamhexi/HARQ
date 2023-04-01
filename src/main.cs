@@ -8,6 +8,6 @@ class Program
         // TODO: Implement Gilbert-Elliot model
         // TODO: Add an input to choose to choose model: BSC or Gilbert-Elliot model
         BinarySymmetricChannel bsc = new BinarySymmetricChannel();
-        bsc.Run();
+        bsc.Run(5);
     }
 }
