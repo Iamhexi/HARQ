@@ -16,6 +16,12 @@ class Packet
         this.Content = content;
     }
 
+    public Packet(Packet packet)
+    {
+        this.Id = packet.Id;
+        this.Content = packet.Content;
+    }
+
     public int GetNumberOfMismatchingBits(Packet packet)
     {
         return Content.GetNumberOfMismatchingBits(packet.Content);

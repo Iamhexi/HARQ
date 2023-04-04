@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 
 class Statistics
 {
@@ -21,7 +22,6 @@ class Statistics
         sentPackets.Clear();
     }
 
-    // fixme: always returns 0.0
     public float GetPercentageOfBitsCorrupted()
     {
         int totalBits = 0;
@@ -32,14 +32,16 @@ class Statistics
         if (corruptedBits == 0)
             return .0f;
 
-        return (float) totalBits / corruptedBits;
+        return (float) corruptedBits / totalBits;
     }
 
     private int GetNumberOfBitsCorrupted()
     {
         int corruptedBits = 0;
-        for (int i = 0; i < receivedPackets.Count; i++)
-           corruptedBits += sentPackets[i].GetNumberOfMismatchingBits(receivedPackets[i]);
+        for (int i = 0; i < receivedPackets.Count; i++) {
+            corruptedBits += sentPackets[i].GetNumberOfMismatchingBits(receivedPackets[i]);
+            // Console.WriteLine("sent: {0}, received: {1}", sentPackets[i].Content, receivedPackets[i].Content);
+        }
         return corruptedBits;
     }
 }

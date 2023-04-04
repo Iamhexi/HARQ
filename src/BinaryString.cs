@@ -1,28 +1,30 @@
 class BinaryString
 {
-    public string Content {set;get;}
+    public string Content;
+    // {
+    //     set 
+    //     { 
+    //         char[] contentAsCharArray = value.ToCharArray();
+
+    //         for (int i = 0; i < Content.Length; i++)
+    //             contentAsCharArray[i] = (contentAsCharArray[i] == '0') ? '0' : '1';
+
+    //         Content = new string(contentAsCharArray);
+    //     }
+
+    //     get
+    //     {
+    //         return Content;
+    //     }
+    // }
 
     public BinaryString(string content)
     {
-        SetContent(content);
-    }
-
-    // BinaryString can contain only ones and zeros. Every non-zero character is set to 1.
-    public void SetContent(string content)
-    {
         Content = content;
-        for (int i = 0; i < Content.Length; i++) {
-            // TODO: rewrite with a notion that strings are immutable
-            // if (Content[i] != '0')
-            //     Content[i] = '1';
-            // else
-            //     Content[i] = '0';
-        }
     }
 
     public void InvertBit(int index)
     {
-        // TODO: implement
         char[] copyAsCharArray = Content.ToCharArray();
         
         if (index < Content.Length) {

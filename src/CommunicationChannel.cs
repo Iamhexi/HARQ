@@ -33,7 +33,7 @@ class CommunicationChannel
 
     private static Packet CreatePacket(BinaryString message)
     {
-        return new Packet( message.ToString() );
+        return new Packet(message);
     }
 
     private static BinaryString CreateBinaryString(Packet packet)
@@ -78,17 +78,20 @@ class CommunicationChannel
             return;
         }
         // get the message from the receiver
-        BinaryString encodedMessage = sender.GetNewMessage();
+        BinaryString plainMessage = sender.GetNewMessage();
+        
+        // report the packet to statistics module before apply interferences
+        Packet notEncodedPacket = new Packet(plainMessage);
+        statistics.ReportSentPacket(notEncodedPacket);
 
         // apply detection then correction encoding
+        BinaryString encodedMessage = plainMessage;
         encodedMessage = detectionEncoder.Encode(encodedMessage);
         encodedMessage = correctionEncoder.Encode(encodedMessage);
 
         // pack data into a packet
         Packet packet = CommunicationChannel.CreatePacket(encodedMessage);
 
-        // report the packet to statistics module before apply interferences
-        statistics.ReportSentPacket(packet);
 
         // simulate interferences inside a communication channel
         interferenceGenerator.DeformPacket(packet);
