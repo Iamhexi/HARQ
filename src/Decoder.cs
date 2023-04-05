@@ -1,4 +1,4 @@
 interface Decoder 
 {
-    BinaryString Decode(BinaryString encodedMessage);
+    Packet Decode(Packet encodedMessage);
 }

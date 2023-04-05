@@ -1,4 +1,4 @@
 interface Encoder
 {
-    BinaryString Encode(BinaryString message);
+    Packet Encode(Packet message);
 }

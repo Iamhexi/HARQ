@@ -1,7 +1,7 @@
 class NoEncoder : Encoder
 {
     // No encoding happens, just plain copy of the original message
-    public BinaryString Encode(BinaryString message)
+    public Packet Encode(Packet message)
     {
         return message;
     }
