@@ -9,14 +9,12 @@ class Statistics
 
     public void ReportSentPacket(Packet packet)
     {
-        sentPackets.Add(packet.Clone());   
-        Console.WriteLine("sent packet added to stats has content: " + packet.Content);     
+        sentPackets.Add(packet.Clone());
     }
 
     public void ReportReceivedPacket(Packet packet)
     {
         receivedPackets.Add(packet);
-        Console.WriteLine("received packet added to stats has content: " + packet.Content);     
     }
     
     public void Reset()
@@ -45,7 +43,7 @@ class Statistics
         int corruptedBits = 0;
         for (int i = 0; i < receivedPackets.Count; i++) {
             corruptedBits += sentPackets[i].GetNumberOfMismatchingBits(receivedPackets[i]);
-            Console.WriteLine("sent: {0}, received: {1}", sentPackets[i].Content, receivedPackets[i].Content);
+            // Console.WriteLine("sent: {0}, received: {1}", sentPackets[i].Content, receivedPackets[i].Content);
         }
         return corruptedBits;
     }

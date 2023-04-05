@@ -2,18 +2,23 @@ using System;
 
 class BSCInterferenceGenerator : InterferenceGenerator
 {
+    public readonly double ErrorProbability = 0.1;
+
     private Random randomNumberGenerator = new Random();
 
-    // deform a packet by inverting a single random bit
+    // deform a packet by inverting a bit with probablity ErrorProbability
     public Packet DeformPacket(Packet packet)
     {
-        // interference probability equal to 1.0
-        Packet result = new Packet(packet.Content);
+        int index = 0;
 
-        int randomIndex = randomNumberGenerator.Next(0, result.Content.GetLength());
-        InvertBit(result.Content, randomIndex);
+        while (index < packet.Length) {
+            if (randomNumberGenerator.NextDouble() <= ErrorProbability)
+                InvertBit(packet.Content, index);
 
-        return result;
+            index++;
+        }
+
+        return packet;
     }
 
     private BinaryString InvertBit(BinaryString message, int index)
