@@ -49,4 +49,32 @@ class Packet
     {
         this.Id = idCounter++; 
     }
+
+    private string Align(string content, char alignWith, int bits)
+    {
+        int missingBits = bits - content.Length;
+        string alignment = new string(alignWith, missingBits);
+        return alignment + content;
+    }
+
+    private string GetHeader()
+    {
+
+        const int sizeOfPacketIdInBits = 32;
+        const int sizeOfSourceSA = 32;
+        const int sizeOfDestinationSA = 32;
+
+        string idInBinary = Convert.ToString(Id, 2);
+        string alignedId = Align(idInBinary, '0', sizeOfPacketIdInBits);
+
+        string sourceSA = new string ('0', sizeOfSourceSA);
+        string destinationSA = new string("1") + new string('0', sizeOfDestinationSA - 1);
+
+        return alignedId + sourceSA + destinationSA;
+    }
+
+    public override string ToString()
+    {
+        return GetHeader() + Content;
+    }   
 }
