@@ -4,35 +4,35 @@ class Packet
 {
     public int Id { get; private set; }
     public int Length { get; } = 0;
-    public BinaryString Content { get; }
+    public BinaryString Content { get; private set; }
     protected static int idCounter = 0;
 
     public Packet(int id, string content)
     {
         Id = id;
         this.Content = new BinaryString(String.Copy(content));
-        Length = Content.GetLength(); // TODO: add header length as well
+        Length = ToString().Length;
     }
 
     public Packet(string content)
     {
         setId();
         this.Content = new BinaryString(content);
-        Length = Content.GetLength(); // TODO: add header length as well
+        Length = ToString().Length;
     }
 
     public Packet(BinaryString content)
     {
         setId();
         this.Content = content;
-        Length = Content.GetLength(); // TODO: add header length as well
+        Length = ToString().Length;
     }
 
     public Packet(Packet packet)
     {
         this.Id = packet.Id;
         this.Content = packet.Content;
-        Length = Content.GetLength(); // TODO: add header length as well
+        Length = ToString().Length;
     }
 
     public Packet Clone()
@@ -67,10 +67,10 @@ class Packet
         string idInBinary = Convert.ToString(Id, 2);
         string alignedId = Align(idInBinary, '0', sizeOfPacketIdInBits);
 
-        string sourceSA = new string ('0', sizeOfSourceSA);
-        string destinationSA = new string("1") + new string('0', sizeOfDestinationSA - 1);
+        string sourceSA = new string ('0', sizeOfSourceSA); // 32 zeros: 0.0.0.0
+        string destinationSA = new string("1") + new string('0', sizeOfDestinationSA - 1); // 1 one and 31 zeros: 128.0.0.0
 
-        return alignedId + sourceSA + destinationSA;
+        return alignedId + sourceSA + destinationSA; // 92-bit header
     }
 
     public override string ToString()
