@@ -23,7 +23,8 @@ class Sender
     {
         // TODO: read data from data source and progress lastPosition by PacketSizeInBits
 
-        string message = "1010101";
+
+        string message = "10101010101010101010101010101010";
         Console.WriteLine("Sent message:     {0}", message);
         return new BinaryString(message);
     }

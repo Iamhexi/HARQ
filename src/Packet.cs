@@ -68,9 +68,10 @@ class Packet
         string alignedId = Align(idInBinary, '0', sizeOfPacketIdInBits);
 
         string sourceSA = new string ('0', sizeOfSourceSA); // 32 zeros: 0.0.0.0
-        string destinationSA = new string("1") + new string('0', sizeOfDestinationSA - 1); // 1 one and 31 zeros: 128.0.0.0
+        string destinationSA = new string("1") + new string('0', sizeOfDestinationSA - 1); // 1 one and 31 zeros: 128.0.0.01011101 inationSA; 
+        // 92-bit header
 
-        return alignedId + sourceSA + destinationSA; // 92-bit header
+        return alignedId + sourceSA + destinationSA;
     }
 
     public override string ToString()

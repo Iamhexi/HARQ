@@ -2,9 +2,14 @@ using System;
 
 class BSCInterferenceGenerator : InterferenceGenerator
 {
-    public readonly double ErrorProbability = 0.1;
+    public readonly float ErrorProbability = .1f;
 
     private Random randomNumberGenerator = new Random();
+
+    public BSCInterferenceGenerator(float errorProbability)
+    {
+        this.ErrorProbability = errorProbability;
+    }
 
     // deform a packet by inverting a bit with probablity ErrorProbability
     public Packet DeformPacket(Packet packet)

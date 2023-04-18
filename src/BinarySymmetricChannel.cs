@@ -2,8 +2,15 @@ using System;
 
 class BinarySymmetricChannel : Model
 {
+    public float ErrorProbability = .5f;
     private CommunicationChannel channel = new CommunicationChannel();
-    private Statistics statistics = new Statistics();
+    public Statistics statistics;
+
+    public BinarySymmetricChannel(float errorProbability, ref Statistics statistics)
+    {
+        this.ErrorProbability = errorProbability;
+        this.statistics = statistics;
+    }
 
     public override void Run(int iterations)
     {
@@ -23,14 +30,12 @@ class BinarySymmetricChannel : Model
             randomData
         ));
 
-        channel.AddInterferenceGenerator(new BSCInterferenceGenerator());
+        channel.AddInterferenceGenerator(new BSCInterferenceGenerator(ErrorProbability));
 
         for (int i = 0; i < iterations; i++) {
             channel.TrasmitData(); // sent content depends on the sender
             channel.RetrieveData(); // method of handling received data depends on the receiver
         }
-
-        Console.WriteLine("Bits corrupted: " + statistics.GetPercentageOfBitsCorrupted() * 100.0f + "%");
 
     }
 }
