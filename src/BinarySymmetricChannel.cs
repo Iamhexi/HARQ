@@ -18,14 +18,14 @@ class BinarySymmetricChannel : Model
 
 
         channel.AddReceiver(new Receiver(
-            new NoDecoder(),
-            new NoDecoder(),
+            new NoDecoder(), // detection
+            new NoDecoder(), // correction
             ref this.statistics
         ));
 
         channel.AddSender(new Sender(
-            new NoEncoder(),
-            new NoEncoder(),
+            new CRC8Encoder(), // detection
+            new NoEncoder(), // correction
             ref this.statistics,
             randomData
         ));

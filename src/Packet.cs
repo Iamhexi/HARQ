@@ -4,40 +4,45 @@ class Packet
 {
     public int Id { get; private set; }
     public int Length { get; } = 0;
+    public PacketType Type = PacketType.Data;
     public BinaryString Content { get; private set; }
     protected static int idCounter = 0;
 
-    public Packet(int id, string content)
+    public Packet(int id, string content, PacketType packetType = PacketType.Data)
     {
         Id = id;
         this.Content = new BinaryString(String.Copy(content));
         Length = ToString().Length;
+        this.Type = packetType;
     }
 
-    public Packet(string content)
+    public Packet(string content, PacketType packetType = PacketType.Data)
     {
         setId();
         this.Content = new BinaryString(content);
         Length = ToString().Length;
+        this.Type = packetType;
     }
 
-    public Packet(BinaryString content)
+    public Packet(BinaryString content, PacketType packetType = PacketType.Data)
     {
         setId();
         this.Content = content;
         Length = ToString().Length;
+        this.Type = packetType;
     }
 
-    public Packet(Packet packet)
+    public Packet(Packet packet, PacketType packetType = PacketType.Data)
     {
         this.Id = packet.Id;
         this.Content = packet.Content;
         Length = ToString().Length;
+        this.Type = packet.Type;
     }
 
     public Packet Clone()
     {
-        return new Packet(Id, Content.Content);
+        return new Packet(Id, Content.Content, Type);
     }
 
     public int GetNumberOfMismatchingBits(Packet packet)
@@ -59,23 +64,32 @@ class Packet
 
     private string GetHeader()
     {
-
         const int sizeOfPacketIdInBits = 32;
-        const int sizeOfSourceSA = 32;
-        const int sizeOfDestinationSA = 32;
+        const int sizeOfSourceAddress = 32;
+        const int sizeOfDestinationAddress = 32;
+        const int sizeOfDataSize = 16;
+        // const int sizeOfPacketType = 8;
+        
 
         string idInBinary = Convert.ToString(Id, 2);
         string alignedId = Align(idInBinary, '0', sizeOfPacketIdInBits);
 
-        string sourceSA = new string ('0', sizeOfSourceSA); // 32 zeros: 0.0.0.0
-        string destinationSA = new string("1") + new string('0', sizeOfDestinationSA - 1); // 1 one and 31 zeros: 128.0.0.01011101 inationSA; 
-        // 92-bit header
+        string sourceAddress = new string ('0', sizeOfSourceAddress); // 32 zeros: 0.0.0.0
+        string destinationAddress = new string("1") + new string('0', sizeOfDestinationAddress - 1); // 1 one and 31 zeros: 128.0.0.0 
 
-        return alignedId + sourceSA + destinationSA;
+        string dataSize =  Align( Convert.ToString(this.Content.GetLength(), 2) , '0' , sizeOfDataSize);
+        string packetType = PacketTypeConverter.Convert(Type);
+
+        return alignedId + sourceAddress + destinationAddress + dataSize + packetType;
+    }
+
+    public string getPayload()
+    {
+        return Content.ToString();
     }
 
     public override string ToString()
     {
-        return GetHeader() + Content;
+        return GetHeader() + getPayload();
     }   
 }
