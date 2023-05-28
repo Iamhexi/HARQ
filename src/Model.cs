@@ -1,4 +1,4 @@
 abstract class Model
 {
-    public abstract void Run(int iterations);
+    public abstract void Run(string filename);
 }

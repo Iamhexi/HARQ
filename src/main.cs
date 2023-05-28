@@ -7,6 +7,8 @@ class Program
         Statistics statistics = new Statistics();
         Model currentModel = null;
         int iterations = 0;
+
+        string fileToTransfer = "model/from/file.txt";
         // TODO: Implement Simple Encoder and Decoder and construct them inside CommunicationChannel
     
         Console.WriteLine("Choose a model: Binary Symmetric Channel [bsc] or Gilbert-Elliot Model [gem]: ");
@@ -37,7 +39,7 @@ class Program
             return;
         }
 
-        currentModel.Run(iterations);
+        currentModel.Run(fileToTransfer);
         Console.WriteLine("Bits corrupted: " + statistics.GetPercentageOfBitsCorrupted() * 100.0f + "%");
     }
 }

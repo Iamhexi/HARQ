@@ -26,14 +26,16 @@ class GilberElliotModel : Model
     }
 
 
-    public override void Run(int iterations)
+    public override void Run(string filename)
     {
         int index = 0;
 
+        // TODO: only required number of times, not constant 100
+        int iterations = 100;
         while (index < iterations) {
 
             changeStateIfNecessary();
-            currentState.Run(1); // run just one iteration of the BSC per loop iteration
+            currentState.Run(filename); // run just one iteration of the BSC per loop iteration
             
             index++;
         }

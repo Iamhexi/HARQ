@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Text;
 
 class BinarySymmetricChannel : Model
 {
@@ -12,10 +14,11 @@ class BinarySymmetricChannel : Model
         this.statistics = statistics;
     }
 
-    public override void Run(int iterations)
+    public override void Run(string filename)
     {
-        string randomData = "0100010101010011111111100000010010100101010101001";
-
+        byte[] bytes = System.IO.File.ReadAllBytes(filename); // from file to bytes
+        BitArray bitArray = new BitArray(bytes); // from bytes to bits
+        var dataToTransfer = ToBitString(bitArray); // from bits to string
 
         channel.AddReceiver(new Receiver(
             new NoDecoder(), // detection
@@ -27,15 +30,30 @@ class BinarySymmetricChannel : Model
             new CRC8Encoder(), // detection
             new NoEncoder(), // correction
             ref this.statistics,
-            randomData
+            dataToTransfer
         ));
 
         channel.AddInterferenceGenerator(new BSCInterferenceGenerator(ErrorProbability));
 
+        // TODO: trasmit data as long as required
+        int iterations = 100;
         for (int i = 0; i < iterations; i++) {
             channel.TrasmitData(); // sent content depends on the sender
             channel.RetrieveData(); // method of handling received data depends on the receiver
         }
 
+    }
+
+    private static string ToBitString(BitArray bits)
+    {
+        var sb = new StringBuilder();
+
+        for (int i = 0; i < bits.Count; i++)
+        {
+            char c = bits[i] ? '1' : '0';
+            sb.Append(c);
+        }
+
+        return sb.ToString();
     }
 }
