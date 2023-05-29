@@ -34,16 +34,28 @@ class CommunicationChannel
             else if (interferenceGenerator == null)
                 throw new System.NullReferenceException("To transmit data in CommunicationChannel, interferenceGenerator must not be null.");
             return false;
+            
+
         } catch (System.NullReferenceException e) {
             Console.WriteLine(e.Message);
             return true;
         }
     }
 
+    public bool TrasmissionDataAvailable()
+    {
+        return sender.HasData();
+    }
+
     public void TrasmitData()
     {
         if (ErrorOccurs()) {
             Console.WriteLine("Error occured, data could not be transmitted.");
+            return;
+        }
+
+        if (!sender.HasData()) {
+            Console.WriteLine("The sender does not have more data. An attempt to trasmit an empty packet has been skipped!");
             return;
         }
 

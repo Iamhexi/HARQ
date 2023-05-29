@@ -28,7 +28,7 @@ class BinarySymmetricChannel : Model
 
         channel.AddSender(new Sender(
             new CRC8Encoder(), // detection
-            new NoEncoder(), // correction
+            new RSEncoder(), // correction
             ref this.statistics,
             dataToTransfer
         ));
@@ -36,8 +36,7 @@ class BinarySymmetricChannel : Model
         channel.AddInterferenceGenerator(new BSCInterferenceGenerator(ErrorProbability));
 
         // TODO: trasmit data as long as required
-        int iterations = 100;
-        for (int i = 0; i < iterations; i++) {
+        while (channel.TrasmissionDataAvailable()) {
             channel.TrasmitData(); // sent content depends on the sender
             channel.RetrieveData(); // method of handling received data depends on the receiver
         }

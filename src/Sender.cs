@@ -2,7 +2,7 @@ using System;
 
 class Sender
 {
-    public static int PacketSizeInBits = 400; // 50 bytes
+    public static int PayloadSizeInBytes = Settings.PacketPayloadSize;
 
     private Encoder correctionEncoder = new NoEncoder();
     private Encoder detectionEncoder = new NoEncoder();
@@ -19,19 +19,18 @@ class Sender
         this.dataSource = dataSource;
     }
 
-    private BinaryString GetNewMessage()
+    private BinaryString GetFullSizedPayload()
     {
-        // TODO: read data from data source and progress lastPosition by PacketSizeInBits
+        const int bitsPerByte = 8;
+        string output = dataSource.Substring(lastPosition, PayloadSizeInBytes*bitsPerByte);
+        lastPosition += PayloadSizeInBytes * bitsPerByte;
 
-
-        string message = "10101010101010101010101010101010";
-        Console.WriteLine("Sent message:     {0}", message);
-        return new BinaryString(message);
+        return new BinaryString(output);
     }
 
     public bool HasData()
     {
-        return lastPosition < dataSource.Length;
+        return lastPosition < dataSource.Length - 1;
     }
 
     private bool HasEncoders()
@@ -48,12 +47,34 @@ class Sender
         }
     }
 
+    private int BitsLeft()
+    {
+        return dataSource.Length - lastPosition - 1;
+    }
+
+    public BinaryString GetLastDataPayload()
+    {
+        string output = dataSource.Substring(lastPosition, BitsLeft());
+        lastPosition = dataSource.Length;
+        return new BinaryString(output);
+    }
+
     public Packet NextPacket()
     {
         if (!HasEncoders())
             return null;
+        
+        BinaryString payload;
+        const int bitsPerByte = 8;
 
-        Packet packet = new Packet(GetNewMessage());
+        if (!HasData())
+            return null;
+        else if (BitsLeft() < (bitsPerByte*PayloadSizeInBytes))
+            payload = GetLastDataPayload();
+        else
+            payload = GetFullSizedPayload();
+
+        Packet packet = new Packet(payload);
         packet = detectionEncoder.Encode(packet);
         packet = correctionEncoder.Encode(packet);
 

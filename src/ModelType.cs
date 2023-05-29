@@ -1,5 +1,5 @@
-enum ModelType
+public enum ModelType
 {
     BinarySymmetricChannel,
-    GilbertEllitonModel
+    GilbertElliotModel
 }

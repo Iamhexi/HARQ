@@ -6,20 +6,14 @@ class Program
     {
         Statistics statistics = new Statistics();
         Model currentModel = null;
-        int iterations = 0;
 
         string fileToTransfer = "model/from/file.txt";
         // TODO: Implement Simple Encoder and Decoder and construct them inside CommunicationChannel
-    
-        Console.WriteLine("Choose a model: Binary Symmetric Channel [bsc] or Gilbert-Elliot Model [gem]: ");
-        string userInput = Console.ReadLine();
-        Console.WriteLine("Enter a number of packets to trasmit: ");
-        iterations = Convert.ToInt32(Console.ReadLine());
 
-        if (userInput == "bsc") {
+        if (Settings.EmployedModelType == ModelType.BinarySymmetricChannel) {
             BinarySymmetricChannel bsc = new BinarySymmetricChannel(.15f, ref statistics);
             currentModel = bsc;
-        } else if (userInput == "gem") {
+        } else if (Settings.EmployedModelType == ModelType.GilbertElliotModel) {
             float goodStateErrorProbability = .01f;
             float badStateErrorProbability = .75f;
             float goodToBadProbability = 0.1f;
