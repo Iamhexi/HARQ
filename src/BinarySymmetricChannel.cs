@@ -20,9 +20,15 @@ class BinarySymmetricChannel : Model
         BitArray bitArray = new BitArray(bytes); // from bytes to bits
         var dataToTransfer = ToBitString(bitArray); // from bits to string
 
+        // DetectionDecoder decoder = 
+        //     (Settings.EmployedDetectionCode == DetectionCodeType.CRC8) ? new CRC8Decoder() : new CRC32Decoder();
+
+        // Encoder encoder =
+        //     (Settings.EmployedDetectionCode == DetectionCodeType.CRC8) ? new CRC8Encoder() : new CRC32Encoder();
+
         channel.AddReceiver(new Receiver(
-            new NoDecoder(), // detection
-            new NoDecoder(), // correction
+            new CRC8Decoder(),
+            new RSDecoder(), // correction
             ref this.statistics
         ));
 

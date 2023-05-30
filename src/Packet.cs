@@ -6,6 +6,8 @@ class Packet
     public int Length { get; } = 0;
     public PacketType Type = PacketType.Data;
     public BinaryString Content { get; private set; }
+    public BinaryString DetectionCode = new BinaryString("");
+    public BinaryString CorrectionCode = new BinaryString("");
     protected static int idCounter = 0;
 
     public Packet(int id, string content, PacketType packetType = PacketType.Data)
@@ -62,7 +64,7 @@ class Packet
         return alignment + content;
     }
 
-    private string GetHeader()
+    public string GetHeader()
     {
         const int sizeOfPacketIdInBits = 32;
         const int sizeOfSourceAddress = 32;
@@ -85,7 +87,7 @@ class Packet
 
     public string getPayload()
     {
-        return Content.ToString();
+        return Content.ToString() + DetectionCode + CorrectionCode;
     }
 
     public override string ToString()

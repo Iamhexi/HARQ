@@ -10,11 +10,11 @@ class CRC32Encoder : Encoder
         {
             if(crc[i] == '0')
             {
-                message.Content.AttachZero();
+                message.DetectionCode.AttachZero();
             }
             else
             {
-                message.Content.AttachOne();
+                message.DetectionCode.AttachOne();
             }
         }
         return message;

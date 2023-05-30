@@ -22,11 +22,11 @@ class RSEncoder : Encoder
         {
             if(byteString[i] == '0')
             {
-                message.Content.AttachZero();
+                message.CorrectionCode.AttachZero();
             }
             else
             {
-                message.Content.AttachOne();
+                message.CorrectionCode.AttachOne();
             }
         }
         

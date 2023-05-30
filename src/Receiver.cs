@@ -2,11 +2,11 @@ using System;
 
 class Receiver
 {
-    private Decoder detectionDecoder = null;
+    private DetectionDecoder detectionDecoder = null;
     private Decoder correctionDecoder = null;
     private Statistics statistics;
 
-    public Receiver(Decoder detectionDecoder, Decoder correctionDecoder, ref Statistics statistics)
+    public Receiver(DetectionDecoder detectionDecoder, Decoder correctionDecoder, ref Statistics statistics)
     {
         this.detectionDecoder = detectionDecoder;
         this.correctionDecoder = correctionDecoder;
@@ -33,7 +33,10 @@ class Receiver
         receivedPacket = correctionDecoder.Decode(receivedPacket);
         
         // TODO: apply to the whole packet
-        receivedPacket = detectionDecoder.Decode(receivedPacket);
+        if (detectionDecoder.Decode(receivedPacket))
+            Console.WriteLine("Sending ACK..."); // TODO: send a real packet
+        else
+            Console.WriteLine("Sending NACK..."); // TODO: send a real packet
 
         statistics.ReportReceivedPacket(receivedPacket);
 
