@@ -4,5 +4,5 @@ enum PacketType
     Acknowledgement,
     NoAcknowledgement,
     Establish,
-    End
+    EndTransmission
 }

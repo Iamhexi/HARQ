@@ -4,6 +4,7 @@ using System.Collections.Generic;
 class CommunicationChannel
 {
     private Queue<Packet> channel = new Queue<Packet>();
+    private Packet feedback = null;
 
     private InterferenceGenerator interferenceGenerator = null;
     private Sender sender = null;
@@ -59,11 +60,18 @@ class CommunicationChannel
             return;
         }
 
+
         // pack data into a packet
         Packet packet = sender.NextPacket();
-
+        
         // simulate interferences inside a communication channel
         interferenceGenerator.DeformPacket(packet);
+
+        if (packet.Type != PacketType.Data) {
+            feedback = packet;
+            return;
+        }
+
 
         // pass on the packet to the channel
         channel.Enqueue(packet);

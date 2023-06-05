@@ -10,7 +10,7 @@ class Packet
     public BinaryString CorrectionCode = new BinaryString("");
     protected static int idCounter = 0;
 
-    public Packet(int id, string content, PacketType packetType = PacketType.Data)
+    public Packet(int id, PacketType packetType = PacketType.Data, string content = "")
     {
         Id = id;
         this.Content = new BinaryString(String.Copy(content));
@@ -18,7 +18,7 @@ class Packet
         this.Type = packetType;
     }
 
-    public Packet(string content, PacketType packetType = PacketType.Data)
+    public Packet(PacketType packetType = PacketType.Data, string content = "")
     {
         setId();
         this.Content = new BinaryString(content);
@@ -26,8 +26,10 @@ class Packet
         this.Type = packetType;
     }
 
-    public Packet(BinaryString content, PacketType packetType = PacketType.Data)
+    public Packet(PacketType packetType = PacketType.Data, BinaryString content = null)
     {
+        if (content == null)
+            content = new BinaryString("");
         setId();
         this.Content = content;
         Length = ToString().Length;
@@ -44,7 +46,7 @@ class Packet
 
     public Packet Clone()
     {
-        return new Packet(Id, Content.Content, Type);
+        return new Packet(Id, Type, Content.Content);
     }
 
     public int GetNumberOfMismatchingBits(Packet packet)

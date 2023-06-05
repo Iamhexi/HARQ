@@ -18,7 +18,7 @@ class PacketTypeConverter
             case PacketType.Establish:
                 return "10010010";
 
-            case PacketType.End:
+            case PacketType.EndTransmission:
                 return "00100100";
 
             default:
@@ -43,7 +43,7 @@ class PacketTypeConverter
                 return PacketType.Establish;
 
             case "00100100":
-                return PacketType.End;
+                return PacketType.EndTransmission;
 
             default:
                 throw new Exception("An attempt to convert unrecognised packet type has been made!");
