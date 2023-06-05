@@ -14,11 +14,11 @@ class GilberElliotModel : Model
         float goodStateErrorProbability,
         float badStateErrorProbability,
         float goodToBadProbability,
-        float badToGoodProbability,
-        ref Statistics statistics)
+        float badToGoodProbability
+        )
     {
-        goodState = new BinarySymmetricChannel(goodStateErrorProbability, ref statistics);
-        badState = new BinarySymmetricChannel(badStateErrorProbability, ref statistics);
+        goodState = new BinarySymmetricChannel(goodStateErrorProbability);
+        badState = new BinarySymmetricChannel(badStateErrorProbability);
         this.goodToBadProbability = goodToBadProbability;
         this.badToGoodProbability = badToGoodProbability;
 

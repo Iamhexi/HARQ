@@ -6,7 +6,6 @@ class Sender
 
     private Encoder correctionEncoder = new NoEncoder();
     private Encoder detectionEncoder = new NoEncoder();
-    private Statistics statistics;
 
     private int lastPacketId = 0;
     private string dataSource;
@@ -14,11 +13,10 @@ class Sender
     private bool transmissionStarted = false;
     
 
-    public Sender(Encoder detectionEncoder, Encoder correctionEncoder, ref Statistics statistics, string dataSource)
+    public Sender(Encoder detectionEncoder, Encoder correctionEncoder, string dataSource)
     {
         this.correctionEncoder = correctionEncoder;
         this.detectionEncoder = detectionEncoder;
-        this.statistics = statistics;
         this.dataSource = dataSource;
     }
 
@@ -75,7 +73,7 @@ class Sender
             return new Packet(PacketType.Establish, "");
         } else if (!HasData()) { // terminate transmission 
             transmissionStarted = false;
-            return new Packet(lastPacketId, PacketType.EndTransmission); // TODO: not reported in the statistics
+            return new Packet(lastPacketId, PacketType.EndTransmission);
         } else if (BitsLeft() < (bitsPerByte*PayloadSizeInBytes))
             payload = GetLastDataPayload();
         else
@@ -85,7 +83,7 @@ class Sender
         packet = detectionEncoder.Encode(packet);
         packet = correctionEncoder.Encode(packet);
 
-        statistics.ReportSentPacket(packet);
+        // statistics.ReportSentPacket(packet);
 
         lastPacketId++;
         return packet;

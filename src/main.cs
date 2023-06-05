@@ -4,14 +4,12 @@ class Program
 {
     static void Main(string[] args)
     {
-        Statistics statistics = new Statistics();
         Model currentModel = null;
 
         string fileToTransfer = "model/from/file.txt";
-        // TODO: Implement Simple Encoder and Decoder and construct them inside CommunicationChannel
 
         if (Settings.EmployedModelType == ModelType.BinarySymmetricChannel) {
-            BinarySymmetricChannel bsc = new BinarySymmetricChannel(.15f, ref statistics);
+            BinarySymmetricChannel bsc = new BinarySymmetricChannel(.005f);
             currentModel = bsc;
         } else if (Settings.EmployedModelType == ModelType.GilbertElliotModel) {
             float goodStateErrorProbability = .01f;
@@ -23,8 +21,7 @@ class Program
                 goodStateErrorProbability,
                 badStateErrorProbability,
                 goodToBadProbability,
-                badToGoodProbability,
-                ref statistics
+                badToGoodProbability
             );
 
             currentModel = gem;
@@ -34,6 +31,7 @@ class Program
         }
 
         currentModel.Run(fileToTransfer);
-        Console.WriteLine("Bits corrupted: " + statistics.GetPercentageOfBitsCorrupted() * 100.0f + "%");
+
+        Statistics.ShowStatistics();
     }
 }

@@ -6,12 +6,10 @@ class BinarySymmetricChannel : Model
 {
     public float ErrorProbability = .5f;
     private CommunicationChannel channel = new CommunicationChannel();
-    public Statistics statistics;
 
-    public BinarySymmetricChannel(float errorProbability, ref Statistics statistics)
+    public BinarySymmetricChannel(float errorProbability)
     {
         this.ErrorProbability = errorProbability;
-        this.statistics = statistics;
     }
 
     public override void Run(string filename)
@@ -28,14 +26,12 @@ class BinarySymmetricChannel : Model
 
         channel.AddReceiver(new Receiver(
             new CRC8Decoder(),
-            new RSDecoder(), // correction
-            ref this.statistics
+            new NoDecoder() // correction
         ));
 
         channel.AddSender(new Sender(
             new CRC8Encoder(), // detection
-            new RSEncoder(), // correction
-            ref this.statistics,
+            new NoEncoder(), // correction
             dataToTransfer
         ));
 

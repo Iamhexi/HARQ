@@ -3,6 +3,8 @@ public class Settings
     public const int PacketPayloadSize = 10; // in Bytes, between [10, 2^16] Bytes
     public const DetectionCodeType EmployedDetectionCode = DetectionCodeType.CRC8; // CRC8, CRC32
     public const ModelType EmployedModelType = ModelType.BinarySymmetricChannel;
+
+    public static int packetsPerSecond = 5; // 0 - no limit
 }
 
 // ewneutalnie bez Reed-Solomona

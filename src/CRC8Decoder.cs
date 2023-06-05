@@ -1,3 +1,5 @@
+using System;
+
 class CRC8Decoder: DetectionDecoder
 {
     public bool Decode(Packet encodedMessage)
@@ -6,6 +8,6 @@ class CRC8Decoder: DetectionDecoder
         string dataWithoutCodes = encodedMessage.GetHeader() + encodedMessage.Content;
         string crc = calc.checksum(dataWithoutCodes);
 
-        return new BinaryString(crc) == encodedMessage.DetectionCode;
+        return new BinaryString(crc).Equals(encodedMessage.DetectionCode);
     }
 }

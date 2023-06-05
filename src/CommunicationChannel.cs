@@ -4,7 +4,7 @@ using System.Collections.Generic;
 class CommunicationChannel
 {
     private Queue<Packet> channel = new Queue<Packet>();
-    private Packet feedback = null;
+    private Packet recentlyTransmittedPacket = null;
 
     private InterferenceGenerator interferenceGenerator = null;
     private Sender sender = null;
@@ -56,22 +56,25 @@ class CommunicationChannel
         }
 
         if (!sender.HasData()) {
-            Console.WriteLine("The sender does not have more data. An attempt to trasmit an empty packet has been skipped!");
+            Console.WriteLine("The sender does not have more data. An attempt to trasmit an empty data packet has been skipped!");
             return;
         }
 
+        Packet packet;
 
-        // pack data into a packet
-        Packet packet = sender.NextPacket();
+        if (recentlyTransmittedPacket != null && receiver.Feedback != null && receiver.Feedback.Type == PacketType.NoAcknowledgement) {
+            packet = recentlyTransmittedPacket;
+            Statistics.Retransmissions++;
+        } else {
+            packet = sender.NextPacket();
+            Statistics.TrasmittedPackets++;
+        }
         
+        recentlyTransmittedPacket = packet.Clone();
+        Console.WriteLine("Recently transmitted: {0}", recentlyTransmittedPacket.Id);
+
         // simulate interferences inside a communication channel
         interferenceGenerator.DeformPacket(packet);
-
-        if (packet.Type != PacketType.Data) {
-            feedback = packet;
-            return;
-        }
-
 
         // pass on the packet to the channel
         channel.Enqueue(packet);
@@ -85,6 +88,11 @@ class CommunicationChannel
         } else if (channel.Count == 0) {
             Console.WriteLine("There are not messages in the communication channel available to be retrieved.");
             return;
+        }
+
+        if (receiver.Feedback != null) {
+            Console.WriteLine("Receiver: " + receiver.Feedback.Type);
+            receiver.Feedback = null;
         }
 
         Packet receivedPacket = channel.Dequeue();

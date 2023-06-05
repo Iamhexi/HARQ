@@ -2,15 +2,14 @@ using System;
 
 class Receiver
 {
+    public Packet Feedback = null;
     private DetectionDecoder detectionDecoder = null;
     private Decoder correctionDecoder = null;
-    private Statistics statistics;
 
-    public Receiver(DetectionDecoder detectionDecoder, Decoder correctionDecoder, ref Statistics statistics)
+    public Receiver(DetectionDecoder detectionDecoder, Decoder correctionDecoder)
     {
         this.detectionDecoder = detectionDecoder;
         this.correctionDecoder = correctionDecoder;
-        this.statistics = statistics;
     }
 
     private bool HasDecoders()
@@ -28,18 +27,18 @@ class Receiver
     }
 
     public void ReceiveMessage(Packet receivedPacket)
-    {
-        // TODO: apply only to the packet's content
-        receivedPacket = correctionDecoder.Decode(receivedPacket);
-        
-        // TODO: apply to the whole packet
-        if (detectionDecoder.Decode(receivedPacket))
-            Console.WriteLine("Sending ACK..."); // TODO: send a real packet
+    {   
+        if (receivedPacket.Type == PacketType.Establish)
+            Console.WriteLine("Conntection established.");
+        else if (detectionDecoder.Decode(receivedPacket))
+            Feedback = new Packet(receivedPacket.Id, PacketType.Acknowledgement);
         else
-            Console.WriteLine("Sending NACK..."); // TODO: send a real packet
+            Feedback = new Packet(receivedPacket.Id, PacketType.NoAcknowledgement);
 
-        statistics.ReportReceivedPacket(receivedPacket);
+        // statistics.ReportReceivedPacket(receivedPacket);
 
-        Console.WriteLine("Received message: {0} ",  receivedPacket.Content );
+        Console.WriteLine("Trasmitter: {0}, {1} ", receivedPacket.Type,  receivedPacket.Content );
+        int delay = (Settings.packetsPerSecond == 0) ? 0 : 1000/Settings.packetsPerSecond;
+        System.Threading.Thread.Sleep( delay );
     }
 }

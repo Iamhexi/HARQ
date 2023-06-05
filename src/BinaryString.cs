@@ -1,4 +1,6 @@
-class BinaryString
+using System;
+
+class BinaryString : IEquatable<BinaryString>
 {
     public string Content;
     // {
@@ -21,6 +23,11 @@ class BinaryString
     public BinaryString(string content)
     {
         Content = content;
+    }
+
+    public virtual bool Equals(BinaryString other)
+    {
+        return this.Content.Equals(other.Content);
     }
 
     public void InvertBit(int index)

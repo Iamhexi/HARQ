@@ -4,18 +4,19 @@ class CRC8Encoder : Encoder
 {
     public Packet Encode(Packet message)
     {
-        string msg = message.ToString();
+        string msg = message.GetHeader() + message.Content;
         CRC8Calc calc = new CRC8Calc();
         string crc = calc.checksum(msg);
+
         for(int i = 0; i < crc.Length; i++)
         {
             if(crc[i] == '0')
             {
-                message.Content.AttachZero();
+                message.DetectionCode.AttachZero();
             }
             else
             {
-                message.Content.AttachOne();
+                message.DetectionCode.AttachOne();
             }
         }
         return message;
