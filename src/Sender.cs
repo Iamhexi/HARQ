@@ -20,6 +20,11 @@ class Sender
         this.dataSource = dataSource;
     }
 
+    public void EndTransmission()
+    {
+        transmissionStarted = false;
+    }
+
     private BinaryString GetFullSizedPayload()
     {
         const int bitsPerByte = 8;

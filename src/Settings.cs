@@ -3,8 +3,12 @@ public class Settings
     public const int PacketPayloadSize = 10; // in Bytes, between [10, 2^16] Bytes
     public const DetectionCodeType EmployedDetectionCode = DetectionCodeType.CRC8; // CRC8, CRC32
     public const ModelType EmployedModelType = ModelType.BinarySymmetricChannel;
-
-    public static int packetsPerSecond = 5; // 0 - no limit
+    public const float BSCErrorProbability = .005f;
+    public const float GilbertElliotModelGoodStateErrorProbability = .01f;
+    public const float GilbertElliotModelBadStateErrorProbability = .75f;
+    public const float GilbertElliotModelGoodToBadProbability = 0.1f;
+    public const float GilbertElliotModelBadToGoodProbability = 0.7f;
+    public static int packetsPerSecond = 2; // 0 - no limit
 }
 
 // ewneutalnie bez Reed-Solomona

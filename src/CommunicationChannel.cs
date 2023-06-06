@@ -5,7 +5,6 @@ class CommunicationChannel
 {
     private Queue<Packet> channel = new Queue<Packet>();
     private Packet recentlyTransmittedPacket = null;
-
     private InterferenceGenerator interferenceGenerator = null;
     private Sender sender = null;
     private Receiver receiver = null;
@@ -60,18 +59,31 @@ class CommunicationChannel
             return;
         }
 
-        Packet packet;
+        Packet packet = new Packet(PacketType.Acknowledgement, "");
 
-        if (recentlyTransmittedPacket != null && receiver.Feedback != null && receiver.Feedback.Type == PacketType.NoAcknowledgement) {
-            packet = recentlyTransmittedPacket;
-            Statistics.Retransmissions++;
-        } else {
-            packet = sender.NextPacket();
-            Statistics.TrasmittedPackets++;
+        switch (receiver.Feedback.Type) {
+            case PacketType.Acknowledgement:
+                packet = sender.NextPacket();
+                Statistics.TrasmittedPackets++;
+                recentlyTransmittedPacket = packet.Clone();
+                break;
+
+            case PacketType.NoAcknowledgement:
+                Statistics.Retransmissions++;
+                packet = recentlyTransmittedPacket.Clone();
+                break;
+
+            case PacketType.Establish:
+            case PacketType.Data:
+                // receiver can neither start a transmission or send data
+                break;
+
+            case PacketType.EndTransmission:
+                sender.EndTransmission(); // generally a receiver does not end transmission but he or she can 
+                break;
         }
-        
-        recentlyTransmittedPacket = packet.Clone();
-        Console.WriteLine("Recently transmitted: {0}", recentlyTransmittedPacket.Id);
+
+        Console.WriteLine("Feedback: {0}", receiver.Feedback.Type);
 
         // simulate interferences inside a communication channel
         interferenceGenerator.DeformPacket(packet);
@@ -90,10 +102,6 @@ class CommunicationChannel
             return;
         }
 
-        if (receiver.Feedback != null) {
-            Console.WriteLine("Receiver: " + receiver.Feedback.Type);
-            receiver.Feedback = null;
-        }
 
         Packet receivedPacket = channel.Dequeue();
         receiver.ReceiveMessage(receivedPacket);

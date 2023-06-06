@@ -9,19 +9,16 @@ class Program
         string fileToTransfer = "model/from/file.txt";
 
         if (Settings.EmployedModelType == ModelType.BinarySymmetricChannel) {
-            BinarySymmetricChannel bsc = new BinarySymmetricChannel(.005f);
+            BinarySymmetricChannel bsc = new BinarySymmetricChannel(Settings.BSCErrorProbability);
             currentModel = bsc;
         } else if (Settings.EmployedModelType == ModelType.GilbertElliotModel) {
-            float goodStateErrorProbability = .01f;
-            float badStateErrorProbability = .75f;
-            float goodToBadProbability = 0.1f;
-            float badToGoodProbability = 0.7f;
+            
 
             GilberElliotModel gem = new GilberElliotModel(
-                goodStateErrorProbability,
-                badStateErrorProbability,
-                goodToBadProbability,
-                badToGoodProbability
+                Settings.GilbertElliotModelGoodStateErrorProbability,
+                Settings.GilbertElliotModelBadStateErrorProbability,
+                Settings.GilbertElliotModelGoodToBadProbability,
+                Settings.GilbertElliotModelBadToGoodProbability
             );
 
             currentModel = gem;
