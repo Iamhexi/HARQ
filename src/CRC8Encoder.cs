@@ -8,6 +8,8 @@ class CRC8Encoder : Encoder
         CRC8Calc calc = new CRC8Calc();
         string crc = calc.checksum(msg);
 
+        message.DetectionCode = new BinaryString(""); // clear previous detection code
+
         for(int i = 0; i < crc.Length; i++)
         {
             if(crc[i] == '0')

@@ -29,6 +29,7 @@ class Receiver
     public void ReceiveMessage(Packet receivedPacket)
     {   
         if (receivedPacket.Type == PacketType.Establish) {
+            Console.Write("Connection established.");
         } else if (receivedPacket.Type != PacketType.Data) {
             Feedback = new Packet(receivedPacket.Id, PacketType.Acknowledgement);
         } else if (detectionDecoder.Decode(receivedPacket))

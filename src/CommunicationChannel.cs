@@ -84,8 +84,6 @@ class CommunicationChannel
         }
 
         Console.WriteLine("Feedback: {0}", receiver.Feedback.Type);
-
-        // simulate interferences inside a communication channel
         interferenceGenerator.DeformPacket(packet);
 
         // pass on the packet to the channel
