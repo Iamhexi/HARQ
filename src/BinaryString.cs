@@ -3,22 +3,6 @@ using System;
 class BinaryString : IEquatable<BinaryString>
 {
     public string Content;
-    // {
-    //     set 
-    //     { 
-    //         char[] contentAsCharArray = value.ToCharArray();
-
-    //         for (int i = 0; i < Content.Length; i++)
-    //             contentAsCharArray[i] = (contentAsCharArray[i] == '0') ? '0' : '1';
-
-    //         Content = new string(contentAsCharArray);
-    //     }
-
-    //     get
-    //     {
-    //         return Content;
-    //     }
-    // }
 
     public BinaryString(string content)
     {

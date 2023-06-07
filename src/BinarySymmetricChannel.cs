@@ -42,8 +42,7 @@ class BinarySymmetricChannel : Model
         ));
 
         channel.AddInterferenceGenerator(new BSCInterferenceGenerator(ErrorProbability));
-
-        // TODO: trasmit data as long as required
+        
         while (channel.TrasmissionDataAvailable()) {
             channel.TrasmitData(); // sent content depends on the sender
             channel.RetrieveData(); // method of handling received data depends on the receiver

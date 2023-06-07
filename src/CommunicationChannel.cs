@@ -8,6 +8,7 @@ class CommunicationChannel
     private InterferenceGenerator interferenceGenerator = null;
     private Sender sender = null;
     private Receiver receiver = null;
+    private int lastPacketRetransmissions = 0;
 
     public void AddReceiver(Receiver receiver)
     {
@@ -66,10 +67,12 @@ class CommunicationChannel
                 packet = sender.NextPacket();
                 Statistics.TrasmittedPackets++;
                 recentlyTransmittedPacket = packet.Clone();
+                Statistics.ReportRetransmissionsOfPacket(lastPacketRetransmissions);
+                lastPacketRetransmissions = 0;
                 break;
 
             case PacketType.NoAcknowledgement:
-                Statistics.Retransmissions++;
+                lastPacketRetransmissions++;
                 packet = recentlyTransmittedPacket.Clone();
                 break;
 
@@ -79,7 +82,8 @@ class CommunicationChannel
                 break;
 
             case PacketType.EndTransmission:
-                sender.EndTransmission(); // generally a receiver does not end transmission but he or she can 
+                sender.EndTransmission(); // generally a receiver does not end transmission but he or she can
+                Statistics.ReportRetransmissionsOfPacket(lastPacketRetransmissions);
                 break;
         }
 

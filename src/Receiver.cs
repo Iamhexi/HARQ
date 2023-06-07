@@ -29,19 +29,16 @@ class Receiver
     public void ReceiveMessage(Packet receivedPacket)
     {   
         if (receivedPacket.Type == PacketType.Establish) {
-            Console.Write("Connection established.");
+            Console.WriteLine("Connection established.");
         } else if (receivedPacket.Type != PacketType.Data) {
             Feedback = new Packet(receivedPacket.Id, PacketType.Acknowledgement);
-        } else if (detectionDecoder.Decode(receivedPacket))
+        } else if (detectionDecoder.Decode(receivedPacket)) 
             Feedback = new Packet(receivedPacket.Id, PacketType.Acknowledgement);
         else
             Feedback = new Packet(receivedPacket.Id, PacketType.NoAcknowledgement);
 
-        // statistics.ReportReceivedPacket(receivedPacket);
-        
         Console.WriteLine("Received packet: {0}, {1}", receivedPacket.Type, receivedPacket.Content);
-        // Console.WriteLine("Trasmitter: {0}, {1} ", receivedPacket.Type,  receivedPacket.Content );
-        int delay = (Settings.packetsPerSecond == 0) ? 0 : 1000/Settings.packetsPerSecond;
+        int delay = (Settings.PacketsPerSecond == 0) ? 0 : 1000/Settings.PacketsPerSecond;
         System.Threading.Thread.Sleep( delay );
     }
 }

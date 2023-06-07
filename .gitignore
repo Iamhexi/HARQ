@@ -1,2 +1,5 @@
 bin/
 *.exe
+model/to/
+model/from/
+statistics/

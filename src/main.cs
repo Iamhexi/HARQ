@@ -30,5 +30,6 @@ class Program
         currentModel.Run(fileToTransfer);
 
         Statistics.ShowStatistics();
+        Statistics.SaveRetransmissionDistributionToFile("statistics/info.csv");
     }
 }

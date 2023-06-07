@@ -49,11 +49,4 @@ class PacketTypeConverter
                 throw new Exception("An attempt to convert unrecognised packet type has been made!");
         }
     }
-
-    // Data = "00000000",
-    // Acknowledgement = "10101010",
-    // NoAcknowledgement = "11111111",
-    // Establish = "10010010",
-    // End = "00100100"
-
 }
