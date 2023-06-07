@@ -1,6 +1,11 @@
 # HARQ
 The transmission channel C# implementation with Hybrid Automatic Repeat Request (HARQ) error-control methods.
 
+## Commands
+- `make` - builds the enitre simulation
+- `make run` - runs the simulation
+- `make histogram` - using the data from the recent simulation, display a histogram of retransmissions
+
 ## TODO
 - [x] implement the sender-to-receiver trasmission framework with the BSC and the Gilbert-Elliot model
 - [x] define the packet headers
