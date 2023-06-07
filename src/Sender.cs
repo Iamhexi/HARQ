@@ -88,8 +88,7 @@ class Sender
         packet = detectionEncoder.Encode(packet);
         packet = correctionEncoder.Encode(packet);
 
-        // statistics.ReportSentPacket(packet);
-
+        Statistics.ReportSentPacket(packet);
         lastPacketId++;
         return packet;
     }

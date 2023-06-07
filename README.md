@@ -7,9 +7,12 @@ The transmission channel C# implementation with Hybrid Automatic Repeat Request 
 - `make histogram` - using the data from the recent simulation, display a histogram of retransmissions
 
 ## TODO
-- [x] implement the sender-to-receiver trasmission framework with the BSC and the Gilbert-Elliot model
+- [x] implement the sender-to-receiver trasmission framework with the BSC
+- [ ] the same as above but with the Gilbert-Elliot model
 - [x] define the packet headers
 - [x] implement the packet headers
-- [ ] prepare the data for a histogram including number of packets sent, number of retransmissions happened once, twice, thrice and so on
+- [x] prepare the data for a histogram including number of packets sent, number of retransmissions happened once, twice, thrice and so on
+- [x] implement the `make histogram` command
 - [x] implement usage of detection codes using already existing solutions, namely, CRC8 and CRC32
+- [x] include false positives in statistics (reported as correct but actually incorrect)
 - [ ] implement an encoder and a decoder for the Reed-Solomon correction code

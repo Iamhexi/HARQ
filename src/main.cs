@@ -29,7 +29,13 @@ class Program
 
         currentModel.Run(fileToTransfer);
 
-        Statistics.ShowStatistics();
-        Statistics.SaveRetransmissionDistributionToFile("statistics/info.csv");
+        Console.WriteLine("\n\nSummary\n");
+        Console.WriteLine("Detection code: " + Settings.EmployedDetectionCode);
+        Console.WriteLine("Correction code: Reed-Solomon");
+        Console.WriteLine("Model: " + Settings.EmployedModelType);
+        if (Settings.EmployedModelType == ModelType.BinarySymmetricChannel)
+            Console.WriteLine("Error probability: " + Settings.BSCErrorProbability);
+        
+        Statistics.SaveStatisticsToFile("statistics/retransmissions.csv");
     }
 }
