@@ -18,30 +18,22 @@ class BinarySymmetricChannel : Model
         BitArray bitArray = new BitArray(bytes); // from bytes to bits
         var dataToTransfer = ToBitString(bitArray); // from bits to string
 
-        DetectionDecoder decoder;
-        if (Settings.EmployedDetectionCode == DetectionCodeType.CRC8)
-            decoder = new CRC8Decoder();
-        else if (Settings.EmployedDetectionCode == DetectionCodeType.CRC32)
-            decoder = new CRC32Decoder();
-            
-        Encoder encoder;
-        if (Settings.EmployedDetectionCode == DetectionCodeType.CRC8)
-            encoder = new CRC8Encoder();
-        else if (Settings.EmployedDetectionCode == DetectionCodeType.CRC32)
-            encoder = new CRC32Encoder();
+        Decoder correctionDecoder = new RSDecoder();
+        Encoder correctionEncoder = new RSEncoder();
+        // TODO: assign the above decoder and encoder in the place of NoDecoder/NoEncoder
 
-        channel.AddReceiver(new Receiver(
-            decoder, // detection
+        channel.SetReceiver(new Receiver(
+            Settings.GetDetectionDecoder(), // detection
             new NoDecoder() // correction
         ));
 
-        channel.AddSender(new Sender(
-            new CRC8Encoder(), // detection
-            encoder, // correction
+        channel.SetSender(new Sender(
+            Settings.GetDetectionEncoder(), // detection
+            new NoEncoder(), // correction
             dataToTransfer
         ));
 
-        channel.AddInterferenceGenerator(new BSCInterferenceGenerator(ErrorProbability));
+        channel.SetInterferenceGenerator(new BSCInterferenceGenerator(ErrorProbability));
         
         while (channel.TrasmissionDataAvailable()) {
             channel.TrasmitData(); // sent content depends on the sender

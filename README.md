@@ -8,7 +8,7 @@ The transmission channel C# implementation with Hybrid Automatic Repeat Request 
 
 ## TODO
 - [x] implement the sender-to-receiver trasmission framework with the BSC
-- [ ] the same as above but with the Gilbert-Elliot model
+- [x] the same as above but with the Gilbert-Elliot model
 - [x] define the packet headers
 - [x] implement the packet headers
 - [x] prepare the data for a histogram including number of packets sent, number of retransmissions happened once, twice, thrice and so on

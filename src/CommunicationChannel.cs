@@ -10,17 +10,17 @@ class CommunicationChannel
     private Receiver receiver = null;
     private int lastPacketRetransmissions = 0;
 
-    public void AddReceiver(Receiver receiver)
+    public void SetReceiver(Receiver receiver)
     {
         this.receiver = receiver;
     }
 
-    public void AddSender(Sender sender)
+    public void SetSender(Sender sender)
     {
         this.sender = sender;
     }
 
-    public void AddInterferenceGenerator(InterferenceGenerator generator)
+    public void SetInterferenceGenerator(InterferenceGenerator generator)
     {
         this.interferenceGenerator = generator;
     }

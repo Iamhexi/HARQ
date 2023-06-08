@@ -1,56 +1,68 @@
 using System;
-
+using System.Collections;
+using System.Text;
 class GilberElliotModel : Model 
 {
-    private BinarySymmetricChannel goodState;
-    private BinarySymmetricChannel badState;
-    private BinarySymmetricChannel currentState;
+    private CommunicationChannel channel = new CommunicationChannel();
 
-    private Random randomNumberGenerator = new Random();
-    private float goodToBadProbability = .05f;
-    private float badToGoodProbability = .9f;
-
-    public GilberElliotModel(
+    public GilberElliotModel
+    (
         float goodStateErrorProbability,
         float badStateErrorProbability,
         float goodToBadProbability,
         float badToGoodProbability
-        )
+    )
     {
-        goodState = new BinarySymmetricChannel(goodStateErrorProbability);
-        badState = new BinarySymmetricChannel(badStateErrorProbability);
-        this.goodToBadProbability = goodToBadProbability;
-        this.badToGoodProbability = badToGoodProbability;
-
-        currentState = goodState;
+        channel.SetInterferenceGenerator(new GEInterferenceGenerator(
+            goodStateErrorProbability,
+            badStateErrorProbability,
+            goodToBadProbability,
+            badToGoodProbability
+        ));
     }
 
 
     public override void Run(string filename)
     {
-        int index = 0;
+        byte[] bytes = System.IO.File.ReadAllBytes(filename); // from file to bytes
+        BitArray bitArray = new BitArray(bytes); // from bytes to bits
+        var dataToTransfer = ToBitString(bitArray); // from bits to string
 
-        // TODO: only required number of times, not constant 100
-        int iterations = 100;
-        while (index < iterations) {
+        Decoder correctionDecoder = new RSDecoder();
+        Encoder correctionEncoder = new RSEncoder();
+        // TODO: assign the above decoder and encoder in the place of NoDecoder/NoEncoder
 
-            changeStateIfNecessary();
-            currentState.Run(filename); // run just one iteration of the BSC per loop iteration
-            
-            index++;
+        channel.SetSender(
+            new Sender(
+                Settings.GetDetectionEncoder(),
+                new NoEncoder(),
+                dataToTransfer
+            )
+        );
+
+        channel.SetReceiver(
+            new Receiver(
+                Settings.GetDetectionDecoder(),
+                new NoDecoder()
+            )
+        );
+        
+        while (channel.TrasmissionDataAvailable()) {
+            channel.TrasmitData();
+            channel.RetrieveData();
         }
     }
 
-    private void changeStateIfNecessary()
+    private static string ToBitString(BitArray bits)
     {
-        float probablity = (float) randomNumberGenerator.NextDouble();
+        var sb = new StringBuilder();
 
-        if (currentState == goodState) {    // the model in the good state
-            if (probablity <= goodToBadProbability)
-                currentState = badState;
-        } else {                            // the model in the bad state
-            if (probablity <= badToGoodProbability)
-                currentState = goodState;
+        for (int i = 0; i < bits.Count; i++)
+        {
+            char c = bits[i] ? '1' : '0';
+            sb.Append(c);
         }
+
+        return sb.ToString();
     }
 }
