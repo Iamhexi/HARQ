@@ -4,6 +4,7 @@ internal class Settings
 
     public const int MaxAllowedRetranmissionBeforePacketDrop = 100;
     public const DetectionCodeType EmployedDetectionCode = DetectionCodeType.CRC8; // CRC8, CRC32
+    public const CorrectionCodeType EmployedCorrectionCode = CorrectionCodeType.ReedSolomon; //ReedSolomon, NoCorrection
     public const ModelType EmployedModelType = ModelType.GilbertElliotModel; // BSC, Gilbert-Elliot
     public const float BSCErrorProbability = .9f;
     public const float GilbertElliotModelGoodStateErrorProbability = .001f;
@@ -28,6 +29,22 @@ internal class Settings
             return new CRC8Decoder();
         else if (Settings.EmployedDetectionCode == DetectionCodeType.CRC32)
             return new CRC32Decoder();
+    }
+
+    public static Encoder GetCorrectionEncoder()
+    {
+        if(Settings.EmployedCorrectionCode == CorrectionCodeType.ReedSolomon)
+            return new RSEncoder();
+        else if(Settings.EmployedCorrectionCode == CorrectionCodeType.NoCorrection)
+            return new NoEncoder();
+    }
+
+    public static Decoder GetCorrectionDecoder()
+    {
+        if(Settings.EmployedCorrectionCode == CorrectionCodeType.ReedSolomon)
+            return new RSDecoder();
+        else if(Settings.EmployedCorrectionCode == CorrectionCodeType.NoCorrection)
+            return new NoDecoder();
     }
 }
 

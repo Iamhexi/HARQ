@@ -7,20 +7,7 @@ class CRC8Encoder : Encoder
         string msg = message.GetHeader() + message.Content;
         CRC8Calc calc = new CRC8Calc();
         string crc = calc.checksum(msg);
-
-        message.DetectionCode = new BinaryString(""); // clear previous detection code
-
-        for(int i = 0; i < crc.Length; i++)
-        {
-            if(crc[i] == '0')
-            {
-                message.DetectionCode.AttachZero();
-            }
-            else
-            {
-                message.DetectionCode.AttachOne();
-            }
-        }
+        message.DetectionCode = new BinaryString(crc);
         return message;
     }
 }

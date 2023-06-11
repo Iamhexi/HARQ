@@ -28,14 +28,11 @@ class GilberElliotModel : Model
         BitArray bitArray = new BitArray(bytes); // from bytes to bits
         var dataToTransfer = ToBitString(bitArray); // from bits to string
 
-        Decoder correctionDecoder = new RSDecoder();
-        Encoder correctionEncoder = new RSEncoder();
-        // TODO: assign the above decoder and encoder in the place of NoDecoder/NoEncoder
 
         channel.SetSender(
             new Sender(
                 Settings.GetDetectionEncoder(),
-                new NoEncoder(),
+                Settings.GetCorrectionEncoder(),
                 dataToTransfer
             )
         );
@@ -43,7 +40,7 @@ class GilberElliotModel : Model
         channel.SetReceiver(
             new Receiver(
                 Settings.GetDetectionDecoder(),
-                new NoDecoder()
+                Settings.GetCorrectionDecoder()
             )
         );
         

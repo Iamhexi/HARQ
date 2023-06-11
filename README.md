@@ -15,4 +15,4 @@ The transmission channel C# implementation with Hybrid Automatic Repeat Request 
 - [x] implement the `make histogram` command
 - [x] implement usage of detection codes using already existing solutions, namely, CRC8 and CRC32
 - [x] include false positives in statistics (reported as correct but actually incorrect)
-- [ ] implement an encoder and a decoder for the Reed-Solomon correction code
+- [x] implement an encoder and a decoder for the Reed-Solomon correction code

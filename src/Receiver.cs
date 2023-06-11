@@ -28,7 +28,8 @@ class Receiver
 
     public void ReceiveMessage(Packet receivedPacket)
     {   
-        receivedPacket = correctionDecoder.Decode(receivedPacket);
+        if(receivedPacket.Type == PacketType.Data)
+            receivedPacket = correctionDecoder.Decode(receivedPacket);
         Statistics.ReportReceivedPacket(receivedPacket);
 
         if (receivedPacket.Type == PacketType.Establish) {

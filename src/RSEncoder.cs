@@ -13,24 +13,13 @@ class RSEncoder : Encoder
             bytes[i] = Convert.ToByte(toEncode.Substring(8 * i, 8), 2);
         }
 
-        byte[] ecc = ReedSolomonAlgorithm.Encode(bytes, 2);
+        byte[] ecc = ReedSolomonAlgorithm.Encode(bytes, bytes.Length - 1);
         string byteString = "";
         for(int i = 0; i < ecc.Length; i++)
         {
             byteString += Convert.ToString(ecc[i], 2).PadLeft(8, '0');
         }
-        for(int i = 0; i < byteString.Length; i++)
-        {
-            if(byteString[i] == '0')
-            {
-                message.CorrectionCode.AttachZero();
-            }
-            else
-            {
-                message.CorrectionCode.AttachOne();
-            }
-        }
-        
+        message.CorrectionCode = new BinaryString(byteString);
         return message;
     }
 }
