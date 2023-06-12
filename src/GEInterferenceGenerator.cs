@@ -47,12 +47,16 @@ class GEInterferenceGenerator: InterferenceGenerator
 
         if (inGoodState) {    // the model in the good state
             if (probablity <= goodToBadProbability) // change to the bad state
+            {
                 inGoodState = false;
                 errorProbability = badStateErrorProbability;
+            }    
         } else {                            // the model in the bad state
             if (probablity <= badToGoodProbability) // change to the good state
+            {
                 inGoodState = true;
                 errorProbability = goodStateErrorProbability;
+            }  
         }
     }
 

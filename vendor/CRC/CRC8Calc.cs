@@ -31,7 +31,7 @@ public class CRC8Calc {
         }
 
 
-        string crc8 = Convert.ToString(crc, 2);
+        string crc8 = Convert.ToString(crc, 2).PadLeft(8, '0');
         return crc8;
     }
 

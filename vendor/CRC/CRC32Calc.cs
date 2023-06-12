@@ -23,7 +23,7 @@ public class CRC32Calc
             byte pos = (byte)((crc ^ (b << 24)) >> 24);
             crc = (uint)((crc << 8) ^ (uint)(crcTable[pos]));
         }
-        return Convert.ToString(crc, 2);
+        return Convert.ToString(crc, 2).PadLeft(32, '0');
     }    
     private void CalculateCrcTable_CRC32()
     {

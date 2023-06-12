@@ -54,7 +54,7 @@ static class Statistics
 
             if (counterpart == null)
                 misjudged++;
-            else if (packet.Content != counterpart.Content)
+            else if (!packet.Content.Equals(counterpart.Content))
                 misjudged++;
             
         }

@@ -31,7 +31,7 @@ class Program
 
         Console.WriteLine("\n\nSummary\n");
         Console.WriteLine("Detection code: " + Settings.EmployedDetectionCode);
-        Console.WriteLine("Correction code: Reed-Solomon");
+        Console.WriteLine("Correction code: "  +  Settings.EmployedCorrectionCode);
         Console.WriteLine("Model: " + Settings.EmployedModelType);
         if (Settings.EmployedModelType == ModelType.BinarySymmetricChannel)
             Console.WriteLine("Error probability: " + Settings.BSCErrorProbability);
