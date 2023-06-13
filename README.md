@@ -4,7 +4,7 @@ The transmission channel C# implementation with Hybrid Automatic Repeat Request 
 ## Commands
 - `make` - builds the enitre simulation
 - `make run` - runs the simulation
-- `make histogram` - using the data from the recent simulation, display a histogram of retransmissions
+- `make histogram` - using the data from the recent simulation, displays a histogram of retransmissions
 
 ## TODO
 - [x] implement the sender-to-receiver trasmission framework with the BSC
@@ -16,3 +16,8 @@ The transmission channel C# implementation with Hybrid Automatic Repeat Request 
 - [x] implement usage of detection codes using already existing solutions, namely, CRC8 and CRC32
 - [x] include false positives in statistics (reported as correct but actually incorrect)
 - [x] implement an encoder and a decoder for the Reed-Solomon correction code
+
+## Dependencies
+- make - build the project and run the commands
+- Octave - to plot histograms
+- mono (or other C# implementation) - to run C#
