@@ -6,8 +6,10 @@ using System.Text;
 static class Statistics
 {
     public static int TrasmittedPackets = 0;
-    
+    public static int IncorrectlyMarkedFalsePositives = 0;
+
     private static int[] retransmissionDistribution = new int[Settings.MaxAllowedRetranmissionBeforePacketDrop + 1]; // retransmissionsDistributions[0] = 5; // 5 packets had 0 retransmissions
+
 
     private static List<Packet> originalData = new List<Packet>();
     private static List<Packet> dataAfterCorrection = new List<Packet>();
@@ -15,13 +17,13 @@ static class Statistics
     public static void ReportSentPacket(Packet sentPacket)
     {
         if (sentPacket.Type == PacketType.Data)
-            originalData.Add(sentPacket);
+            originalData.Add(sentPacket.Clone());
     }
 
     public static void ReportReceivedPacket(Packet receivedPacket)
     {
         if (receivedPacket.Type == PacketType.Data)
-            dataAfterCorrection.Add(receivedPacket);
+            dataAfterCorrection.Add(receivedPacket.Clone());
     }
 
 
@@ -39,8 +41,10 @@ static class Statistics
         for (int i = 0; i <= Settings.MaxAllowedRetranmissionBeforePacketDrop; i++)
             totalRetransmissions += retransmissionDistribution[i] * i;
 
+
         SaveRetransmissionDistributionToFile(filename);
         int falsePostives = CountCorruptedPacketsMarkedAsCorrect();
+        falsePostives--;
 
         Console.WriteLine("Transmitted {0} packets and {2} of them were false positives ({3}%). {1} retransmissions were required.", 
             TrasmittedPackets, totalRetransmissions, falsePostives, Math.Round(100.0f * falsePostives / TrasmittedPackets, 2));
@@ -59,7 +63,7 @@ static class Statistics
             
         }
 
-        return misjudged;
+        return misjudged-IncorrectlyMarkedFalsePositives;
     }
 
     private static Packet FindPacketWithIdOnList(int id, ref List<Packet> packetList)
@@ -80,5 +84,6 @@ static class Statistics
         byte[] bytes = Encoding.UTF8.GetBytes(data);
 
         fs.Write(bytes, 0, bytes.Length);
+        fs.Close();
     }
 }

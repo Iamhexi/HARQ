@@ -13,7 +13,8 @@ class RSEncoder : Encoder
             bytes[i] = Convert.ToByte(toEncode.Substring(8 * i, 8), 2);
         }
 
-        byte[] ecc = ReedSolomonAlgorithm.Encode(bytes, bytes.Length - 1);
+        int eccLength = bytes.Length > 500 ? 32 : bytes.Length - 1;
+        byte[] ecc = ReedSolomonAlgorithm.Encode(bytes, eccLength);
         string byteString = "";
         for(int i = 0; i < ecc.Length; i++)
         {

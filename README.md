@@ -16,6 +16,7 @@ The transmission channel C# implementation with Hybrid Automatic Repeat Request 
 - [x] implement usage of detection codes using already existing solutions, namely, CRC8 and CRC32
 - [x] include false positives in statistics (reported as correct but actually incorrect)
 - [x] implement an encoder and a decoder for the Reed-Solomon correction code
+- [ ] make histogram max limit dynamic
 
 ## Dependencies
 - make - build the project and run the commands

@@ -74,6 +74,15 @@ class CommunicationChannel
             case PacketType.NoAcknowledgement:
                 lastPacketRetransmissions++;
                 packet = recentlyTransmittedPacket.Clone();
+                if (lastPacketRetransmissions >= Settings.MaxAllowedRetranmissionBeforePacketDrop) {
+                    packet = sender.NextPacket();
+                    Statistics.TrasmittedPackets++;
+                    recentlyTransmittedPacket = packet.Clone();
+                    Statistics.ReportRetransmissionsOfPacket(lastPacketRetransmissions);
+                    lastPacketRetransmissions = 0;
+                    Statistics.IncorrectlyMarkedFalsePositives++;
+                }
+                    
                 break;
 
             case PacketType.Establish:
@@ -87,7 +96,8 @@ class CommunicationChannel
                 break;
         }
 
-        Console.WriteLine("Feedback: {0}", receiver.Feedback.Type);
+        if (Settings.ConsoleOutput)
+            Console.WriteLine("Feedback: {0}", receiver.Feedback.Type);
         interferenceGenerator.DeformPacket(packet);
 
         // pass on the packet to the channel

@@ -30,7 +30,6 @@ class Receiver
     {   
         if(receivedPacket.Type == PacketType.Data)
             receivedPacket = correctionDecoder.Decode(receivedPacket);
-        Statistics.ReportReceivedPacket(receivedPacket);
 
         if (receivedPacket.Type == PacketType.Establish) {
             Console.WriteLine("Connection established.");
@@ -38,10 +37,13 @@ class Receiver
             Feedback = new Packet(receivedPacket.Id, PacketType.Acknowledgement);
         } else if (detectionDecoder.Decode(receivedPacket)) {
             Feedback = new Packet(receivedPacket.Id, PacketType.Acknowledgement);
+            Statistics.ReportReceivedPacket(receivedPacket);
         } else
             Feedback = new Packet(receivedPacket.Id, PacketType.NoAcknowledgement);
 
-        Console.WriteLine("Received packet: {0}, {1}", receivedPacket.Type, receivedPacket.Content);
+        if (Settings.ConsoleOutput)
+            Console.WriteLine("Received packet: {0}, {1}", receivedPacket.Type, receivedPacket.Content);
+
         int delay = (Settings.PacketsPerSecond == 0) ? 0 : 1000/Settings.PacketsPerSecond;
         System.Threading.Thread.Sleep( delay );
     }

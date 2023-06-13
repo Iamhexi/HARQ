@@ -1,19 +1,20 @@
 internal class Settings
 {
-    public const int PacketPayloadSize = 10; // in Bytes, between [10, 2^16] Bytes
-
-    public const int MaxAllowedRetranmissionBeforePacketDrop = 100;
+    public const int PacketPayloadSize = 50; // in Bytes, between [10, 2^16] Bytes
+    public const int MaxAllowedRetranmissionBeforePacketDrop = 50;
+    
     public const DetectionCodeType EmployedDetectionCode = DetectionCodeType.CRC8; // CRC8, CRC32
     public const CorrectionCodeType EmployedCorrectionCode = CorrectionCodeType.ReedSolomon; //ReedSolomon, NoCorrection
-    public const ModelType EmployedModelType = ModelType.GilbertElliotModel; // BSC, Gilbert-Elliot
-    public const float BSCErrorProbability = .9f;
+    public const ModelType EmployedModelType = ModelType.BinarySymmetricChannel; // BinarySymmetricChannel, Gilbert-Elliot
+    
+    public const float BSCErrorProbability = .07f;
     public const float GilbertElliotModelGoodStateErrorProbability = .001f;
     public const float GilbertElliotModelBadStateErrorProbability = 0.5f;
     public const float GilbertElliotModelGoodToBadProbability = 0.15f;
     public const float GilbertElliotModelBadToGoodProbability = 0.9f;
     public static int PacketsPerSecond = 0; // 0 - no limit
 
-
+    public const bool ConsoleOutput = true;
 
     public static Encoder GetDetectionEncoder()
     {       
