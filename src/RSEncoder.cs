@@ -13,12 +13,39 @@ class RSEncoder : Encoder
             bytes[i] = Convert.ToByte(toEncode.Substring(8 * i, 8), 2);
         }
 
-        int eccLength = bytes.Length > 500 ? 32 : bytes.Length - 1;
-        byte[] ecc = ReedSolomonAlgorithm.Encode(bytes, eccLength);
-        string byteString = "";
-        for(int i = 0; i < ecc.Length; i++)
+        if(bytes.Length < 2)
         {
-            byteString += Convert.ToString(ecc[i], 2).PadLeft(8, '0');
+            message.CorrectionCode = new BinaryString("");
+            return message;
+        }
+
+        string byteString = "";
+        for(int i = 0; i <= bytes.Length/256; i++)
+        {
+            if(i < bytes.Length/256)
+            {
+                byte[] temp = new byte[256];
+                Array.Copy(bytes, i * 256, temp, 0, 256);
+                byte[] ecc = ReedSolomonAlgorithm.Encode(temp, 255);
+                for(int j = 0; j < ecc.Length; j++)
+                {
+                    byteString += Convert.ToString(ecc[j], 2).PadLeft(8, '0');
+                }
+            }
+            else
+            {
+                if(bytes.Length - (i * 256) > 0)
+                {
+                    byte[] temp = new byte[bytes.Length - (i * 256)];
+                    Array.Copy(bytes, i * 256, temp, 0, temp.Length);
+                    byte[] ecc = ReedSolomonAlgorithm.Encode(temp, temp.Length - 1);
+                    Console.WriteLine("test2");
+                    for(int j = 0; j < ecc.Length; j++)
+                    {
+                        byteString += Convert.ToString(ecc[j], 2).PadLeft(8, '0');
+                    }
+                }
+            }
         }
         message.CorrectionCode = new BinaryString(byteString);
         return message;
