@@ -39,7 +39,6 @@ class RSEncoder : Encoder
                     byte[] temp = new byte[bytes.Length - (i * 256)];
                     Array.Copy(bytes, i * 256, temp, 0, temp.Length);
                     byte[] ecc = ReedSolomonAlgorithm.Encode(temp, temp.Length - 1);
-                    Console.WriteLine("test2");
                     for(int j = 0; j < ecc.Length; j++)
                     {
                         byteString += Convert.ToString(ecc[j], 2).PadLeft(8, '0');
